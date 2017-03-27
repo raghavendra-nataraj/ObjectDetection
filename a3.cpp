@@ -40,7 +40,7 @@ typedef map<string, vector<string> > Dataset;
 
 #include <Classifier.h>
 #include <NearestNeighbor.h>
-
+#include <Baseline.h>
 // Figure out a list of files in a given directory.
 //
 vector<string> files_in_directory(const string &directory, bool prepend_directory = false)
@@ -79,6 +79,8 @@ int main(int argc, char **argv)
     Classifier *classifier=0;
     if(algo == "nn")
       classifier = new NearestNeighbor(class_list);
+    if(algo == "base")
+      classifier = new Baseline(class_list);
     else
       throw std::string("unknown classifier " + algo);
 
