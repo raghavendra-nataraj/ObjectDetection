@@ -73,7 +73,7 @@ public:
       int k=1;
       inpFile<<imageMapping[i]<<" ";
       cout<<i<<endl;
-      for(int j=0;j<vec.width();j++){
+      for(int j=0;j<kSize/*vec.width()*/;j++){
 	CImg<double> temp = T*vec.get_column(j);
 	CImg<double> tVl = temp.transpose() * T.get_column(i);
 	inpFile<<k<<":"<<tVl(0,0)<<" ";
@@ -83,7 +83,7 @@ public:
       inpFile<<endl;
     }
     inpFile.close();
-    int result = system("svm_multiclass_linux64/svm_multiclass_learn -c 1.0 Input_file.dat food.model");
+    int result = system("./svm_multiclass_learn -c 1.0 Input_file.dat food.model");
     cout<<result<<endl;
   }
 
@@ -104,7 +104,7 @@ public:
     // figure nearest neighbor
     inpFile<<"1 ";
     int k=1;
-    for(int j=0;j<uClassify.width();j++){
+    for(int j=0;j<kSize/*uClassify.width()*/;j++){
       CImg<double> temp = uClassify.get_column(j);
       CImg<double> tVl = temp.transpose() * test_image;
       inpFile<<k<<":"<<tVl(0,0)<<" ";
@@ -113,7 +113,7 @@ public:
     }
     inpFile<<endl;
     inpFile.close();
-    int result = system("svm_multiclass_linux64/svm_multiclass_classify Temp_file.dat food.model predictions");
+    int result = system("./svm_multiclass_classify Temp_file.dat food.model predictions");
     ifstream pFile;
     pFile.open("predictions");
     int prediction;
@@ -136,6 +136,7 @@ protected:
       return gImg.unroll('y');
     }
   static const int size=300;  // subsampled image resolution
+  static const int kSize = 50;
   map<string, CImg<double> > models; // trained model
   CImg<double> meanClassify;
   CImg<double> uClassify;

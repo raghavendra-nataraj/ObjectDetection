@@ -26,7 +26,7 @@ public:
 	imgIndex++;
       }
     inpFile.close();
-    int result = system("svm_multiclass_linux64/svm_multiclass_learn -c 1.0 Input_file.dat food.model");
+    int result = system("./svm_multiclass_learn -c 1.0 Input_file.dat food.model");
     //cout<<result<<endl;
   }
 
@@ -43,7 +43,7 @@ public:
     }
     inpFile<<endl;
     inpFile.close();
-    int result = system("svm_multiclass_linux64/svm_multiclass_classify Temp_file.dat food.model predictions");
+    int result = system("./svm_multiclass_classify Temp_file.dat food.model predictions");
     ifstream pFile;
     pFile.open("predictions");
     int prediction;
@@ -61,11 +61,11 @@ protected:
   CImg<double> extract_features(const string &filename)
     {
       CImg<double> temp(filename.c_str());
-      temp = temp.get_RGBtoHSI().get_channel(2).resize(size,size);
-      //temp = temp.resize(size,size);
+      //temp = temp.get_RGBtoHSI().get_channel(2).resize(size,size);
+      temp = temp.resize(size,size);
       return temp.unroll('y');
     }
 
-  static const int size=300;  // subsampled image resolution
+  static const int size=100;  // subsampled image resolution
   map<string, CImg<double> > models; // trained models
 };
