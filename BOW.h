@@ -82,7 +82,7 @@ public:
     }
     inpFile<<endl;
     inpFile.close();
-    int result = system("svm_multiclass_linux64/svm_multiclass_classify Temp_file.dat food.model predictions");
+    int result = system("./svm_multiclass_classify Temp_file.dat food.model predictions");
     ifstream pFile;
     pFile.open("predictions");
     int prediction;
