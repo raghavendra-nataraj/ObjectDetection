@@ -60,8 +60,11 @@ protected:
   // rearranging into a vector of pixel data.
   map<int,double> extract_features(const string &filename)
     {
+      CImg<double> tempFile(filename.c_str());
+      tempFile.resize(size,size);
+      tempFile.save("temp_img.png");
       map<int,double> temp;
-      string cmd = "./overfeat/bin/linux_64/overfeat -f " + filename + " >temp.out";
+      string cmd = "./overfeat/bin/linux_64/overfeat -f temp_img.png >temp.out";
       system(cmd.c_str());
       ifstream inpFile;
       inpFile.open("temp.out");
@@ -79,6 +82,6 @@ protected:
       return temp;
     }
 
-  static const int size=20;  // subsampled image resolution
+  static const int size=231;  // subsampled image resolution
   map<string, CImg<double> > models; // trained models
 };
