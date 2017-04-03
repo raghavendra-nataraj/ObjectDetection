@@ -43,6 +43,7 @@ typedef map<string, vector<string> > Dataset;
 #include <Baseline.h>
 #include <Haarlike.h>
 #include <BOW.h>
+#include <Eigen.h>
 // Figure out a list of files in a given directory.
 //
 vector<string> files_in_directory(const string &directory, bool prepend_directory = false)
@@ -87,6 +88,8 @@ int main(int argc, char **argv)
       classifier = new Haarlike(class_list);
     else if(algo == "bow")
       classifier = new BOW(class_list);
+    else if(algo == "eigen")
+      classifier = new Eigen(class_list);
     else
       throw std::string("unknown classifier " + algo);
 
