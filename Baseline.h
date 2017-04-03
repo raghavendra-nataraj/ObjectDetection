@@ -66,6 +66,6 @@ protected:
       return temp.unroll('y');
     }
 
-  static const int size=300;  // subsampled image resolution
+  static const int size=100;  // subsampled image resolution
   map<string, CImg<double> > models; // trained models
 };
