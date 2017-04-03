@@ -87,8 +87,16 @@ public:
     cout<<result<<endl;
   }
 
+  void loadMeanU(){
+    CImg<double> temp("Eigen/U.cimg");
+    uClassify = temp;
+    CImg<double> temp1("Eigen/mean.cimg");
+    meanClassify=temp1;
+  }
+  
   virtual string classify(const string &filename)
   {
+    loadMeanU();
     CImg<double> test_image = extract_features(filename);
     test_image-=meanClassify;
     ofstream inpFile;
@@ -115,10 +123,7 @@ public:
 
   virtual void load_model()
   {
-    CImg<double> temp("Eigen/U.cimg");
-    uClassify = temp;
-    CImg<double> temp1("Eigen/mean.cimg");
-    meanClassify=temp1;
+    
   }
 protected:
   // extract features from an image, which in this case just involves resampling and 
