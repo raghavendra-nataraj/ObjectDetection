@@ -18,7 +18,7 @@ public:
 	for(int i=0; i<c_iter->second.size(); i++){
 	  CImg<double> temp = extract_features(c_iter->second[i].c_str());
 	  inpFile<<imgIndex<<" ";
-	  for(int j=0;j<temp.width();j++){
+	  for(int j=0;j<temp.height();j++){
 	    inpFile<<j+1<<":"<<temp(j)<<" ";
 	  }
 	  inpFile<<endl;
@@ -38,7 +38,7 @@ public:
     // figure nearest neighbor
     CImg<double> temp = extract_features(filename.c_str());
     inpFile<<"1 ";
-    for(int j=0;j<temp.width();j++){
+    for(int j=0;j<temp.height();j++){
       inpFile<<j+1<<":"<<temp(j)<<" ";
     }
     inpFile<<endl;
@@ -62,11 +62,10 @@ protected:
     {
       CImg<double> temp(filename.c_str());
       temp = temp.get_RGBtoHSI().get_channel(2).resize(size,size);
-      return temp.unroll('x');
-      
-      
+      //temp = temp.resize(size,size);
+      return temp.unroll('y');
     }
 
-  static const int size=100;  // subsampled image resolution
+  static const int size=300;  // subsampled image resolution
   map<string, CImg<double> > models; // trained models
 };
