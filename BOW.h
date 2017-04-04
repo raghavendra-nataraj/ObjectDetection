@@ -17,7 +17,6 @@ public:
       cout << "Processing " << c_iter->first << endl;
       // convert each image to be a row of this "model" image
       for(int i=0; i<c_iter->second.size(); i++){
-	cout<<i<<endl;
 	vector<SiftDescriptor> features = extract_features(c_iter->second[i].c_str());
 	for(int k=0;k<features.size();k++){
 	  points.push_back(features[k].descriptor);
@@ -34,7 +33,6 @@ public:
       cout << "Processing " << c_iter->first << endl;
       for(int i=0; i<c_iter->second.size(); i++){
 	vector<int> histogram(kmeansk,0);
-	cout<<i<<endl;
 	vector<SiftDescriptor> features = extract_features(c_iter->second[i].c_str());
 	for(int k=0;k<features.size();k++){
 	  int which = which_is_nearest(centroids,features[k].descriptor);
@@ -118,10 +116,13 @@ protected:
       // Used few lines for extracting SIFT code from our Assignemtn 2
       CImg<double> input_image(filename.c_str());
       CImg<double> gImg = input_image.get_RGBtoHSI().get_channel(2);
+      gImg.resize(size,size);
       vector<SiftDescriptor> img = Sift::compute_sift(gImg);
       return img;
     }
   map<string, CImg<double> > models; // trained models
-  static const int kmeansk = 50;
+  static const int kmeansk = 20;
+  static const int size = 100;
   vector<vector<float> > centroids;
+  
 };
