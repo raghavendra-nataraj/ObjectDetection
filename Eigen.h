@@ -57,6 +57,7 @@ public:
     for(int i=0;i<vec.width();i++){
       CImg<double> temp = T*vec.get_column(i);
       cout<<temp.width()<<" "<<temp.height()<<endl;
+      temp.normalize(0,255);
       U.append(temp);
       temp.assign(size,size,1,1);
       //temp.display();
