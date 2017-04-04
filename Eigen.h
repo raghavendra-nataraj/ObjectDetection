@@ -56,7 +56,7 @@ public:
     CImg<double> U;
     for(int i=0;i<vec.width();i++){
       CImg<double> temp = T*vec.get_column(i);
-      cout<<temp.width()<<" "<<temp.height()<<endl;
+      //cout<<temp.width()<<" "<<temp.height()<<endl;
       temp.normalize(0,255);
       U.append(temp);
       temp.assign(size,size,1,1);
@@ -136,8 +136,8 @@ protected:
       gImg.resize(size,size);
       return gImg.unroll('y');
     }
-  static const int size=300;  // subsampled image resolution
-  static const int kSize = 50;
+  static const int size=150;  // subsampled image resolution
+  static const int kSize = 145;
   map<string, CImg<double> > models; // trained model
   CImg<double> meanClassify;
   CImg<double> uClassify;
