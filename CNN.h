@@ -64,7 +64,7 @@ protected:
       tempFile.resize(size,size);
       tempFile.save("temp_img.png");
       map<int,double> temp;
-      string cmd = "./overfeat/bin/linux_64/overfeat -f temp_img.png >temp.out";
+      string cmd = "./overfeat/bin/linux_64/overfeat -L 21 temp_img.png >temp.out";
       system(cmd.c_str());
       ifstream inpFile;
       inpFile.open("temp.out");
