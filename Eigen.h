@@ -57,8 +57,9 @@ public:
     for(int i=0;i<vec.width();i++){
       CImg<double> temp = T*vec.get_column(i);
       //cout<<temp.width()<<" "<<temp.height()<<endl;
-      temp.normalize(0,255);
-      U.append(temp);
+      //temp.normalize(0,1);
+      if(U.width()<kSize)
+	U.append(temp);
       temp.assign(size,size,1,1);
       //temp.display();
       ostringstream ss;
@@ -68,19 +69,25 @@ public:
       temp.save_png(ss.str().c_str());
     }
     U.save_cimg("Eigen/U.cimg");
+    U.transpose();
     ofstream inpFile;
     inpFile.open("Input_file.dat");
-    for(int i=0;i<T.width();i++){
+    CImg<double> tVl = U * T;
+    for(int i=0;i<tVl.width();i++){
       int k=1;
       inpFile<<imageMapping[i]<<" ";
       cout<<i<<endl;
-      for(int j=0;j<kSize/*vec.width()*/;j++){
-	CImg<double> temp = T*vec.get_column(j);
-	CImg<double> tVl = temp.transpose() * T.get_column(i);
-	inpFile<<k<<":"<<tVl(0,0)<<" ";
+      //for(int j=0;j<kSize/*vec.width()*/;j++){
+      //CImg<double> temp = T*vec.get_column(j);
+      //cout<<U.height()<<" "<<U.width()<<" "<<T.height()<<endl;
+	
+      //cout<<tVl.width()<<" "<<tVl.height()<<endl;
+      for(int z=0;z<tVl.height();z++){
+	inpFile<<k<<":"<<tVl(i,z)<<" ";
 	k++;	
-	//cout<<tVl.width()<<" "<<tVl.height()<<endl;
       }
+	//cout<<tVl.width()<<" "<<tVl.height()<<endl;
+	//}
       inpFile<<endl;
     }
     inpFile.close();
@@ -90,7 +97,7 @@ public:
 
   void loadMeanU(){
     CImg<double> temp("Eigen/U.cimg");
-    uClassify = temp;
+    uClassify = temp.transpose();
     CImg<double> temp1("Eigen/mean.cimg");
     meanClassify=temp1;
   }
@@ -105,10 +112,9 @@ public:
     // figure nearest neighbor
     inpFile<<"1 ";
     int k=1;
-    for(int j=0;j<kSize/*uClassify.width()*/;j++){
-      CImg<double> temp = uClassify.get_column(j);
-      CImg<double> tVl = temp.transpose() * test_image;
-      inpFile<<k<<":"<<tVl(0,0)<<" ";
+    CImg<double> tVl = uClassify * test_image;
+    for(int j=0;j<tVl.height();j++){
+      inpFile<<k<<":"<<tVl(0,j)<<" ";
       k++;	
       //cout<<tVl.width()<<" "<<tVl.height()<<endl;
     }
@@ -136,8 +142,8 @@ protected:
       gImg.resize(size,size);
       return gImg.unroll('y');
     }
-  static const int size=150;  // subsampled image resolution
-  static const int kSize = 145;
+  static const int size=100;  // subsampled image resolution
+  static const int kSize = 1000;
   map<string, CImg<double> > models; // trained model
   CImg<double> meanClassify;
   CImg<double> uClassify;
