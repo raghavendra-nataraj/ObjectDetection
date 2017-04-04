@@ -65,7 +65,6 @@ public:
       ostringstream ss;
       string imgName = "face"+i;
       ss<<"Eigen/face"<<i<<".png";
-      cout<<ss.str()<<endl;
       temp.save_png(ss.str().c_str());
     }
     U.save_cimg("Eigen/U.cimg");
@@ -143,7 +142,7 @@ protected:
       return gImg.unroll('y');
     }
   static const int size=100;  // subsampled image resolution
-  static const int kSize = 1000;
+  static const int kSize = 200;
   map<string, CImg<double> > models; // trained model
   CImg<double> meanClassify;
   CImg<double> uClassify;
