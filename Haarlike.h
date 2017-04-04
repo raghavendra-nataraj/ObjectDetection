@@ -69,11 +69,18 @@ public:
 
   void loadStrides(){
     haar strides[] = {
-      {30,30,"b,w,w,b"},
-      {30,30,"b,w"},
-      {30,30,"w,b"},
-      {30,30,"b,w,b"},
-      {30,30,"w,b,w"}
+      {50,20,"b,w,w,b"},
+      //{20,20,"b,w;w,b"},
+      // {20,20,"w,b;b,w"},
+      {50,20,"w,b,b,w"},
+      {50,20,"b,w"},
+      {50,20,"w,b"},
+      //{20,20,"b;w"},
+      //{20,20,"w;b"},
+      {50,20,"b,w,b"},
+      {50,20,"w,b,w"}
+      //{20,20,"b;w;b"},
+      //{20,20,"w;b;w"} 
     };
     for(int i=0;i<sizeof(strides)/sizeof(strides[0]);i++){
       int x=1,y=1;
@@ -99,15 +106,15 @@ protected:
   map<long,double> extract_features(const string &filename)
     {
       CImg<double> temp(filename.c_str());
-      temp = temp.get_RGBtoHSI().get_channel(2).resize(300,300);
+      temp = temp.get_RGBtoHSI().get_channel(2).resize(size,size);
       for(int i=0;i<temp.width();i++){
 	for(int j =1;j<temp.height();j++){
 	  temp(i,j) = temp(i,j-1)+temp(i,j);
 	}
       }
-      for(int j=1;j<temp.height();j++){
-	for(int i =0;i<temp.width();i++){
-	  temp(i,j) = temp(i,j-1)+temp(i,j);
+      for(int j=0;j<temp.height();j++){
+	for(int i =1;i<temp.width();i++){
+	  temp(i,j) = temp(i-1,j)+temp(i,j);
 	}
       }
       map<long,double> rVector;
@@ -144,5 +151,6 @@ protected:
     }
   map<string, CImg<double> > models; // trained models
   vector<haar> regions;
+  static const int size = 200;
   
 };
