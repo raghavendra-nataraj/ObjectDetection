@@ -57,7 +57,7 @@ vector<vector<float> > kmeans(vector<vector<float> >&input_vectors, int K){
     cluster.push_back(vectemp);
   }
   int counter = 0;
-  while(1){
+  while(counter<100){
     for(int k = 0; k < K; k ++){
       cluster[k].clear();
     }

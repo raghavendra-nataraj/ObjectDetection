@@ -121,8 +121,8 @@ protected:
       return img;
     }
   map<string, CImg<double> > models; // trained models
-  static const int kmeansk = 20;
-  static const int size = 100;
+  static const int kmeansk = 44;
+  static const int size = 150;
   vector<vector<float> > centroids;
   
 };
