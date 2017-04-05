@@ -16,7 +16,6 @@ public:
 	cout << "Processing " << c_iter->first << endl;
 	// convert each image to be a row of this "model" image
 	for(int i=0; i<c_iter->second.size(); i++){
-	  cout<<i<<endl;
 	  inpFile<<imgIndex<<" ";
 	  map<int,double> temp = extract_features(c_iter->second[i].c_str());
 	  map<int,double>::iterator it;
