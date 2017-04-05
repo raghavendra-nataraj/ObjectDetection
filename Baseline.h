@@ -19,14 +19,14 @@ public:
 	  CImg<double> temp = extract_features(c_iter->second[i].c_str());
 	  inpFile<<imgIndex<<" ";
 	  for(int j=0;j<temp.height();j++){
-	    inpFile<<j+1<<":"<<temp(0,j)<<" ";
+	    inpFile<<j+1<<":"<<temp(0,j,0,0)<<" ";
 	  }
 	  inpFile<<endl;
 	}
 	imgIndex++;
       }
     inpFile.close();
-    int result = system("./svm_multiclass_learn -c 1.0 Input_file.dat food.model");
+    int result = system("./svm_multiclass_learn -c 0.01 Input_file.dat food.model");
     //cout<<result<<endl;
   }
 
@@ -39,7 +39,7 @@ public:
     CImg<double> temp = extract_features(filename.c_str());
     inpFile<<"1 ";
     for(int j=0;j<temp.height();j++){
-      inpFile<<j+1<<":"<<temp(0,j)<<" ";
+      inpFile<<j+1<<":"<<temp(0,j,0,0)<<" ";
     }
     inpFile<<endl;
     inpFile.close();
@@ -61,7 +61,9 @@ protected:
   CImg<double> extract_features(const string &filename)
     {
       CImg<double> temp(filename.c_str());
+      // greyscale Image Baseline
       //temp = temp.get_RGBtoHSI().get_channel(2).resize(size,size);
+      // Color Image Baseline
       temp = temp.resize(size,size);
       return temp.unroll('y');
     }
