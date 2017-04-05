@@ -1,6 +1,8 @@
 #include <fstream>
 #include <map>
 #include <sstream>
+#include <stdlib.h>
+#include <unistd.h>
 struct haar{
   int width;
   int height;
@@ -26,6 +28,7 @@ public:
 	cout << "Processing " << c_iter->first << endl;
 	// convert each image to be a row of this "model" image
 	for(int i=0; i<c_iter->second.size(); i++){
+	  cout<<i<<endl;
 	  map<long,double> temp = extract_features(c_iter->second[i].c_str());
 	  map<long,double>::iterator it;
 	  inpFile<<imgIndex<<" ";
@@ -39,7 +42,7 @@ public:
 	imgIndex++;
       }
     inpFile.close();
-    int result = system("svm_multiclass_linux64/svm_multiclass_learn -c 1.0 Input_file.dat food.model");
+    int result = system("./svm_multiclass_learn -c 1.0 Input_file.dat food.model");
     cout<<result<<endl;
   }
 
@@ -59,7 +62,7 @@ public:
     }
     inpFile<<endl;
     inpFile.close();
-    int result = system("svm_multiclass_linux64/svm_multiclass_classify Temp_file.dat food.model predictions");
+    int result = system("./svm_multiclass_classify Temp_file.dat food.model predictions");
     ifstream pFile;
     pFile.open("predictions");
     int prediction;
@@ -68,21 +71,53 @@ public:
   }
 
   void loadStrides(){
-    haar strides[] = {
+    int num=10;
+    int fType = 12;
+    //haar * strides =(haar*) malloc(sizeof(haar)*num*fType);
+    vector<haar> strides;
+    for(int w=60;w<=100;w+=50){
+      for(int h=60;h<=100;h+=50){
+	haar t1 = {w,h,"b,w,w,b"};
+	strides.push_back(t1);
+	haar t2 = {w,h,"b,w;w,b"};
+	strides.push_back(t2);
+	haar t3 = {w,h,"w,b;b,w"};
+	strides.push_back(t3);
+	haar t4 = {w,h,"w,b,b,w"};
+	strides.push_back(t4);
+	haar t5 = {w,h,"b,w"};
+	strides.push_back(t5);
+	haar t6 = {w,h,"w,b"};
+	strides.push_back(t6);
+	/*haar t7 = {w,h,"b;w"};
+	strides.push_back(t7);
+	haar t8 = {w,h,"w;b"};
+	strides.push_back(t8);
+	haar t9 = {w,h,"b,w,b"};
+	strides.push_back(t9);
+	haar t10 = {w,h,"w,b,w"};
+	strides.push_back(t10);
+	haar t11 = {w,h,"b;w;b"};
+	strides.push_back(t11);
+	haar t12 = {w,h,"w;b;w"};
+	strides.push_back(t12);*/
+      }
+    }
+    /*haar strides[] = {
       {50,20,"b,w,w,b"},
-      //{20,20,"b,w;w,b"},
-      // {20,20,"w,b;b,w"},
+      {50,20,"b,w;w,b"},
+      {50,20,"w,b;b,w"},
       {50,20,"w,b,b,w"},
       {50,20,"b,w"},
       {50,20,"w,b"},
-      //{20,20,"b;w"},
-      //{20,20,"w;b"},
+      {50,20,"b;w"},
+      {50,20,"w;b"},
       {50,20,"b,w,b"},
-      {50,20,"w,b,w"}
-      //{20,20,"b;w;b"},
-      //{20,20,"w;b;w"} 
-    };
-    for(int i=0;i<sizeof(strides)/sizeof(strides[0]);i++){
+      {50,20,"w,b,w"},
+      {50,20,"b;w;b"},
+      {50,20,"w;b;w"} 
+      };*/
+    for(int i=0;i<strides.size();i++){
       int x=1,y=1;
       for(int j=0;j<strides[i].pattern.length();j++){
 	if(strides[i].pattern[j]==','){ y++;continue;}
@@ -143,7 +178,8 @@ protected:
 	    ostringstream ss;
 	    ss<<i+1<<h<<w;
 	    long mkey = atol(ss.str().c_str());
-	    rVector[mkey] = sum;
+	    if(sum!=0)
+	      rVector[mkey] = sum;
 	  }
 	}
       }
