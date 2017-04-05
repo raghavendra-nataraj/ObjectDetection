@@ -19,7 +19,7 @@ public:
 	  CImg<double> temp = extract_features(c_iter->second[i].c_str());
 	  inpFile<<imgIndex<<" ";
 	  for(int j=0;j<temp.height();j++){
-	    inpFile<<j+1<<":"<<temp(j)<<" ";
+	    inpFile<<j+1<<":"<<temp(0,j)<<" ";
 	  }
 	  inpFile<<endl;
 	}
@@ -39,7 +39,7 @@ public:
     CImg<double> temp = extract_features(filename.c_str());
     inpFile<<"1 ";
     for(int j=0;j<temp.height();j++){
-      inpFile<<j+1<<":"<<temp(j)<<" ";
+      inpFile<<j+1<<":"<<temp(0,j)<<" ";
     }
     inpFile<<endl;
     inpFile.close();
@@ -66,6 +66,6 @@ protected:
       return temp.unroll('y');
     }
 
-  static const int size=100;  // subsampled image resolution
+  static const int size=40;  // subsampled image resolution
   map<string, CImg<double> > models; // trained models
 };
