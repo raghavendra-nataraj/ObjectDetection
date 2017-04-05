@@ -41,7 +41,7 @@ public:
 	}
 	inpFile<<imgIndex<<" ";
 	for(int it=1;it<kmeansk+1;it++){
-	  inpFile<<it<<":"<<histogram[it]<<" ";
+	  inpFile<<it<<":"<<histogram[it-1]<<" ";
 	}
 	inpFile<<endl;
       }
@@ -58,7 +58,7 @@ public:
       cntFile<<endl;
     }
     cntFile.close();
-    int result = system("svm_multiclass_linux64/svm_multiclass_learn -c 1.0 Input_file.dat food.model");
+    int result = system("./svm_multiclass_learn -c 1.0 Input_file.dat food.model");
     cout<<result<<endl;
   }
 
@@ -76,7 +76,7 @@ public:
     }
     inpFile<<"1"<<" ";
     for(int it=1;it<kmeansk+1;it++){
-      inpFile<<it<<":"<<histogram[it]<<" ";
+      inpFile<<it<<":"<<histogram[it-1]<<" ";
     }
     inpFile<<endl;
     inpFile.close();
@@ -121,8 +121,9 @@ protected:
       return img;
     }
   map<string, CImg<double> > models; // trained models
-  static const int kmeansk = 44;
-  static const int size = 150;
+
+  static const int kmeansk = 250;
+  static const int size = 100;
   vector<vector<float> > centroids;
   
 };
